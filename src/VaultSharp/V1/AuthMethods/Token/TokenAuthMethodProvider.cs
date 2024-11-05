@@ -86,6 +86,17 @@ namespace VaultSharp.V1.AuthMethods.Token
             return result.AuthInfo;
         }
 
+
+        public async Task<AuthInfo> RenewTokenAsync(string token)
+        {
+            var requestData = new { token = token };    
+
+            var result = await _polymath.MakeVaultApiRequest<Secret<JsonObject>>("v1/auth/token/renew", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            return result.AuthInfo;
+        }
+
+
         public async Task RevokeSelfAsync()
         {
             await _polymath.MakeVaultApiRequest<Secret<JsonObject>>("v1/auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
